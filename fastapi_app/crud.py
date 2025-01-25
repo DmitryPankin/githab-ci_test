@@ -1,7 +1,8 @@
-from .models import Recipe
-from .schemas import RecipeCreate
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
+from .models import Recipe
+from .schemas import RecipeCreate
 
 
 async def get_recipes(db: AsyncSession):

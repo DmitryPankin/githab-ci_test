@@ -1,11 +1,12 @@
 from typing import List
 
-from fastapi_app.models import Base
-from fastapi_app.schemas import Recipe, RecipeCreate
-from fastapi_app.crud import get_recipe, get_recipes, create_recipe_in_db
-from fastapi_app.database import SessionLocal, engine
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from fastapi_app.crud import create_recipe_in_db, get_recipe, get_recipes
+from fastapi_app.database import SessionLocal, engine
+from fastapi_app.models import Base
+from fastapi_app.schemas import Recipe, RecipeCreate
 
 app = FastAPI()
 
@@ -38,12 +39,11 @@ async def read_recipe(recipe_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/recipes", response_model=Recipe)
-async def create_recipe(
-    recipe: RecipeCreate, db: AsyncSession = Depends(get_db)
-):
+async def create_recipe(recipe: RecipeCreate, db: AsyncSession = Depends(get_db)):
     return await create_recipe_in_db(recipe, db)
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8000)

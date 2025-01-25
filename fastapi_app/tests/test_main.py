@@ -1,8 +1,9 @@
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from fastapi_app.models import Base
+
 from fastapi_app.database import engine  # Импортируйте ваш движок базы данных
+from fastapi_app.models import Base
 
 
 # Фикстура для асинхронного клиента
