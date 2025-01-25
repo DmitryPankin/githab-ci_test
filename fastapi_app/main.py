@@ -1,32 +1,49 @@
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
-import models, schemas, crud
-from database import engine, SessionLocal
+
+from fastapi_app.models import Base
+from fastapi_app.schemas import Recipe, RecipeCreate
+from fastapi_app.crud import get_recipe, get_recipes, create_recipe_in_db
+from fastapi_app.database import SessionLocal, engine
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
 app = FastAPI()
+
 
 async def get_db():
     async with SessionLocal() as session:
         yield session
 
+
 @app.on_event("startup")
 async def on_startup():
     async with engine.begin() as conn:
-        await conn.run_sync(models.Base.metadata.create_all)
+        await conn.run_sync(Base.metadata.create_all)
 
-@app.get("/recipes", response_model=List[schemas.Recipe])
-async def read_recipes(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_db)):
-    recipes = await crud.get_recipes(db)
+
+@app.get("/recipes", response_model=List[Recipe])
+async def read_recipes(
+    skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_db)
+):
+    recipes = await get_recipes(db)
     return recipes
 
-@app.get("/recipes/{recipe_id}", response_model=schemas.Recipe)
+
+@app.get("/recipes/{recipe_id}", response_model=Recipe)
 async def read_recipe(recipe_id: int, db: AsyncSession = Depends(get_db)):
-    recipe = await crud.get_recipe(db, recipe_id)
+    recipe = await get_recipe(db, recipe_id)
     if recipe is None:
         raise HTTPException(status_code=404, detail="Recipe not found")
     return recipe
 
-@app.post("/recipes", response_model=schemas.Recipe)
-async def create_recipe(recipe: schemas.RecipeCreate, db: AsyncSession = Depends(get_db)):
-    return await crud.create_recipe(db, recipe)
+
+@app.post("/recipes", response_model=Recipe)
+async def create_recipe(
+    recipe: RecipeCreate, db: AsyncSession = Depends(get_db)
+):
+    return await create_recipe_in_db(recipe, db)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)

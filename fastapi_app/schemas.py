@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+
 
 class RecipeBase(BaseModel):
     title: str
@@ -6,12 +7,13 @@ class RecipeBase(BaseModel):
     ingredients: str
     description: str
 
+
 class RecipeCreate(RecipeBase):
     pass
+
 
 class Recipe(RecipeBase):
     id: int
     views: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)

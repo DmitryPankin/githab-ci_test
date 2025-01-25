@@ -1,13 +1,19 @@
-from sqlalchemy import Column, Integer, String, Text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Integer, String, Text
 
-Base = declarative_base()
 
+# Define the base class for your models
+class Base(DeclarativeBase):
+    pass
+
+
+# Define the Recipe model
 class Recipe(Base):
     __tablename__ = "recipes"
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    views = Column(Integer, default=0)
-    cook_time = Column(Integer)
-    ingredients = Column(Text)
-    description = Column(Text)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String, index=True)
+    views: Mapped[int] = mapped_column(Integer, default=0)
+    cook_time: Mapped[int] = mapped_column(Integer)
+    ingredients: Mapped[str] = mapped_column(Text)
+    description: Mapped[str] = mapped_column(Text)
