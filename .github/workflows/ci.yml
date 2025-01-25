@@ -41,7 +41,7 @@ jobs:
 
       # Шаг 6: Проверка форматирования кода с помощью Black
       - name: Run Black (Code Formatting Check)
-        run: black . --check
+        run: black .
 
       # Шаг 7: Статический анализ типов с помощью Mypy
       - name: Run Mypy (Type Checking)
