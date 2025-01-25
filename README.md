@@ -1,1 +1,1 @@
-app for testing ci-cd
+app for testing ci
