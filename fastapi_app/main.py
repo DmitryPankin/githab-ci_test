@@ -39,7 +39,8 @@ async def read_recipe(recipe_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/recipes", response_model=Recipe)
-async def create_recipe(recipe: RecipeCreate, db: AsyncSession = Depends(get_db)):
+async def create_recipe(recipe: RecipeCreate,
+                        db: AsyncSession = Depends(get_db)):
     return await create_recipe_in_db(recipe, db)
 
 
