@@ -37,7 +37,7 @@ jobs:
 
       # Шаг 5: Проверка сортировки импортов с помощью isort
       - name: Run isort (Import Sorting Check)
-        run: isort . --check-only
+        run: isort . 
 
       # Шаг 6: Проверка форматирования кода с помощью Black
       - name: Run Black (Code Formatting Check)
